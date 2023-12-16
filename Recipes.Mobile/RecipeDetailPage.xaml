@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Recipes.Mobile.RecipeDetailPage"
+             Title="RecipeDetailPage">
+    <ScrollView>
+        <VerticalStackLayout Padding="10">
+            <!--Заголовок-->
+            <Label 
+                FontAttributes="Bold" FontSize="22"
+                Text="{Binding Title, Mode=OneTime}"/>
+            <Image
+                Margin="5" HeightRequest="35"
+                IsVisible="{Binding IsFavorite}"
+                Source="favorite.png" WidthRequest="35" />
+            <!--Переключатель для информации об аллергенах: проверка OneWayToSource-->
+            <VerticalStackLayout Padding="10">
+                <Label FontAttributes="Italic"
+                       Text="Show Allergen information"
+                       VerticalOptions="Center" />
+                <CheckBox IsChecked="{Binding ShowAllergenInformation, Mode=OneWayToSource}" />
+                <HorizontalStackLayout>
+                    <Label IsVisible="{Binding ShowAllergenInformation, Mode=OneWay}"
+                           Text="TODO: add allergen information" />
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+            <!--Горизонтальный стек для кнопок добавление в избранное: проверка ICommand-->
+            <VerticalStackLayout>
+
+                <!--Старый вариант для разных команд-->
+                <!--<Button Command="{Binding AddAsFavoriteCommand}" Text="Add as favorite" />
+                <Button Command="{Binding RemoveAsFavoriteCommand}" Text="Remove as favorite" />-->
+                <!--Новый вариант для команды с параметром-->
+                <Button
+                    Command="{Binding SetFavoriteCommand}"
+                    CommandParameter="{x:Boolean true}"
+                    Text="Add as favorite" />
+                <Button
+                    Command="{Binding SetFavoriteCommand}"
+                    CommandParameter="{x:Boolean false}"
+                    Text="Remove as favorite" />
+                <!--ВЫЗЫВАЕТ ОШИБКУ XLS0506 НО РАБОТАЕТ КАК ЧАСЫ-->
+            </VerticalStackLayout>
+            <!--Горизонтальный стек для VM списка ингридиентов-->
+            <HorizontalStackLayout Padding="10" BindingContext="{Binding IngredientsList}">
+                <Label Text="Number of servings:" VerticalOptions="Center" />
+
+                <Label
+                    Margin="10,0"
+                    FontAttributes="Bold"
+                    Text="{Binding NumberOfServings, Mode=OneWay}"
+                    VerticalOptions="Center" />
+
+                <Stepper
+                    BackgroundColor="{OnPlatform WinUI={StaticResource Primary}}"
+                    Maximum="8"
+                    Minimum="1"
+                    Value="{Binding NumberOfServings, Mode=TwoWay}" />
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
